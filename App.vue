@@ -1,19 +1,17 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Vue CLIの世界へようこそ"/>
+    <sign-up></sign-up>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
+  import Signup from './components/Signup.vue';
+  export default {
+    name:'app',
+    components:{
+      'sign-up': Signup,
+    }    
   }
-}
 </script>
 
 <style>
@@ -23,6 +21,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
