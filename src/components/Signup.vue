@@ -19,8 +19,8 @@
 /*eslint no-irregular-whitespace: ["error", { "skipComments": true }]*/
 /*eslint no-mixed-spaces-and-tabs: ["error", "smart-tabs"]*/
 
-import firebase from '../firebaseConfig';
-let db = firebase.firestore();
+import firebase from 'firebase'
+import db from '../firebaseConfig'
 
 export default {  
   name: 'Signup',
@@ -38,12 +38,9 @@ export default {
           let person = firebase.auth().currentUser;
           person.updateProfile({
             displayName: this.userName
-          })
-          //firestoreのusersテーブルに、名前、メルアド、銭を格納
+          })          
           //銭は、一律で500ポイントを各ユーザに付与
-          db.collection("users").add({
-              name: this.userName,
-              emailAddress: this.email,
+          db.collection("users").add({              
               money: 500,
           })
           .then(function() {
