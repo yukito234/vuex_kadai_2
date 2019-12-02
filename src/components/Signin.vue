@@ -27,10 +27,11 @@ export default {
     signIn() {      
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
       .then(() => {
-        alert('ログイン成功')
+        store.dispatch('nameSetAction', firebase.auth().currentUser.displayName);
+        alert('ログイン成功');
       })
       .catch(error => {
-        alert(error.message)
+        alert(error.message);
       })
     }
   }
