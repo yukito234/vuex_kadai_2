@@ -17,11 +17,13 @@ export default {
   name: 'UserTable',
   data () {
     return {
-      loginUserName: "",
+      
     }
-  },  
-  created:function(){
-    this.loginUserName = this.$store.state.currentUserName;
-  },  
+  },
+  computed:{
+    loginUserName(){
+      return this.$store.state.currentUserName;
+    }
+  },
 }
 </script>

@@ -8,6 +8,7 @@ import UserTable from './components/UserTable.vue'
 import Signup from './components/Signup.vue'
 import Signin from './components/Signin.vue'
 import firebase from 'firebase'
+import store from './store'
 
 Vue.use(Router)
 
@@ -43,6 +44,7 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth) {    
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
+        store.dispatch('nameSetAction', firebase.auth().currentUser.displayName);
         next()
       } else {
         next({
