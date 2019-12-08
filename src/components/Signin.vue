@@ -14,6 +14,7 @@
 <script>
 /*eslint no-console: ["error", { allow: ["warn", "error"] }] */
 import firebase from 'firebase'
+import store from '../store'
 
 export default {
   name: 'Signin',
@@ -29,6 +30,7 @@ export default {
       .then(() => {
         store.dispatch('nameSetAction', firebase.auth().currentUser.displayName);
         alert('ログイン成功');
+        this.$router.push('/');
       })
       .catch(error => {
         alert(error.message);

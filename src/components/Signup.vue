@@ -45,6 +45,11 @@ export default {
           })
           .then(function() {
             alert("登録完了");
+            firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+            .then(() => {
+              alert('ログイン成功');
+              this.$router.push('/');
+            })
           })
           .catch(error => {
             alert(error.message)
