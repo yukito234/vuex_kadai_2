@@ -17,6 +17,9 @@ const store = new Vuex.Store({
 		nameSet(state, name){
 			state.currentUserName = name;			
 		},
+		nameInit(state){
+			state.currentUserName = "";
+		},
 	},	
 })
 

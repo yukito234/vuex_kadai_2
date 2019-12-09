@@ -28,6 +28,7 @@ export default {
   },
   methods: {
     signOut() {
+      this.$store.commit('nameInit');
       firebase.auth().signOut().then(() => {
         this.$router.push('/signin')
       })
