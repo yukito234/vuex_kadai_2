@@ -43,13 +43,9 @@ export default {
           db.collection("users").add({              
               money: 500,
           })
-          .then(function() {
+          .then(() => {
             alert("登録完了");
-            firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-            .then(() => {
-              alert('ログイン成功');
-              this.$router.push('/');
-            })
+            this.$router.push('/');
           })
           .catch(error => {
             alert(error.message)

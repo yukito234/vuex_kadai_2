@@ -1,6 +1,7 @@
 <template>
   <div>    
     <span>{{loginUserName}}さんようこそ！！</span>
+    <button v-on:click="signOut">ログアウト</button>
   </div>
 </template>
 
@@ -25,5 +26,13 @@ export default {
       return this.$store.state.currentUserName;
     }
   },
+  methods: {
+    signOut() {
+      this.$store.commit('nameInit');
+      firebase.auth().signOut().then(() => {
+        this.$router.push('/signin')
+      })
+    },
+  }
 }
 </script>
