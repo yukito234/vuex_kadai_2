@@ -39,9 +39,10 @@ export default {
           person.updateProfile({
             displayName: this.userName
           })          
-          //銭は、一律で500ポイントを各ユーザに付与
-          db.collection("users").add({              
-              money: 500,
+          
+          db.collection("users").add({ 
+              name: this.userName,//UserTable.vueでユーザ一覧を表示するために保存しておく
+              money: 500,//銭は、一律で500ポイントを各ユーザに付与
           })
           .then(() => {
             alert("登録完了");
