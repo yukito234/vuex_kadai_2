@@ -94,42 +94,62 @@ export default {
     },
     moneyTransfer(name){     
       let targetUserID = "";//送り先ユーザのドキュメントID
-      let targetUserMoney =0;//送り先ユーザの残高
+      let targetUserMoney = 0;//送り先ユーザの残高
+      const that = this;
+
       const amount = Number( prompt(`あなたの残高：${this.loginUserMoney}\n送金額を入力してください`) );
+
       //送り先ユーザのドキュメントIDと残高を取得
-      db.collection("users").get()
-        .then((querySnapshot)=>{
-          for(let i =0; i<querySnapshot.docs.length; i++){           
-            if(querySnapshot.docs[i].data().name === name){
-              targetUserID = querySnapshot.docs[i].id;
-              targetUserMoney = querySnapshot.docs[i].data().money;
-            }
-          }
-          //ログインユーザと送り先ユーザの取引後の残高を計算
-          this.loginUserMoney = this.loginUserMoney - amount;
-          targetUserMoney = targetUserMoney + amount;
-          
-          //ログインユーザのfirestoreの残高データを更新
-          db.collection("users").doc(this.loginUserID)
-            .update({
-              money:this.loginUserMoney,
+      function getTargetInfo(){
+        return new Promise( resolve => {
+          db.collection("users").get()
+            .then( querySnapshot => {
+                for( let i = 0; i < querySnapshot.docs.length; i++ ){         
+                  if( querySnapshot.docs[i].data().name === name ){                      
+                    targetUserID = querySnapshot.docs[i].id;
+                    targetUserMoney = querySnapshot.docs[i].data().money;
+                    resolve();
+                  }
+                }                
             })
-            .then(function() {
-              //送り先ユーザのfirestoreの残高データを更新
-              db.collection("users").doc(targetUserID)
-                .update({
-                  money:targetUserMoney,
-                })
-                .then(function() {
-                })
-                .catch(function(error) {                
-                  console.error("Error updating document: ", error);
-                });
-            })
-            .catch(function(error) {            
-              console.error("Error updating document: ", error);
-            });
+            .catch( error => {
+              alert(error.message);
+            });            
         });
+      }
+      //ログインユーザと送り先ユーザの取引後の残高を計算
+      async function culcMoney(){
+        that.loginUserMoney = that.loginUserMoney - amount;        
+        targetUserMoney = targetUserMoney + amount;        
+        return ;
+      }
+      //トランザクション処理により、ログインユーザと送り先ユーザのfirestore残高データを更新
+      function doTransaction(){
+        const loginUserRef = db.collection("users").doc(that.loginUserID);
+        const targetUserRef = db.collection("users").doc(targetUserID);        
+
+        db.runTransaction( transaction => {
+          const loginUserTransaction = transaction.update(loginUserRef, { money: that.loginUserMoney });          
+          const targetUserTransaction =transaction.update(targetUserRef, { money: targetUserMoney });
+          return Promise.all( [loginUserTransaction, targetUserTransaction] );
+        }).then(function() {
+            console.warn("トランザクション処理は正常に完了しました");            
+        }).catch(function(err) {
+            alert("エラーが発生し、送金に失敗しました");            
+            console.error(err);
+        });
+      }
+      //送金の一連の処理をまとめた関数
+      async function ExecuteMoneyTransfer(){
+        await getTargetInfo();
+        await culcMoney();
+        await doTransaction();
+        return;
+      }
+      //送金の実行
+      ExecuteMoneyTransfer().then( result => {        
+        alert("送金は正常に完了しました");        
+      });
     },
   }
 }
