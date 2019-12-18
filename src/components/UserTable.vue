@@ -100,22 +100,20 @@ export default {
       const amount = Number( prompt(`あなたの残高：${this.loginUserMoney}\n送金額を入力してください`) );
 
       //送り先ユーザのドキュメントIDと残高を取得
-      function getTargetInfo(){
-        return new Promise( resolve => {
-          db.collection("users").get()
+      async function getTargetInfo(){
+        return db.collection("users").get()
             .then( querySnapshot => {
                 for( let i = 0; i < querySnapshot.docs.length; i++ ){         
-                  if( querySnapshot.docs[i].data().name === name ){                      
+                  if( querySnapshot.docs[i].data().name === name ){
                     targetUserID = querySnapshot.docs[i].id;
                     targetUserMoney = querySnapshot.docs[i].data().money;
-                    resolve();
+                    return ;
                   }
                 }                
             })
             .catch( error => {
               alert(error.message);
-            });            
-        });
+            });
       }
       //ログインユーザと送り先ユーザの取引後の残高を計算
       async function culcMoney(){
@@ -128,15 +126,16 @@ export default {
         const loginUserRef = db.collection("users").doc(that.loginUserID);
         const targetUserRef = db.collection("users").doc(targetUserID);        
 
-        db.runTransaction( transaction => {
+        return db.runTransaction( async transaction => {
           const loginUserTransaction = transaction.update(loginUserRef, { money: that.loginUserMoney });          
           const targetUserTransaction =transaction.update(targetUserRef, { money: targetUserMoney });
-          return Promise.all( [loginUserTransaction, targetUserTransaction] );
+          //return Promise.resolve();
+          return ;
         }).then(function() {
-            console.warn("トランザクション処理は正常に完了しました");            
+          alert("送金は正常に完了しました");          
         }).catch(function(err) {
-            alert("エラーが発生し、送金に失敗しました");            
-            console.error(err);
+          alert("エラーが発生し、送金に失敗しました");            
+          console.error(err);
         });
       }
       //送金の一連の処理をまとめた関数
@@ -147,9 +146,7 @@ export default {
         return;
       }
       //送金の実行
-      ExecuteMoneyTransfer().then( result => {        
-        alert("送金は正常に完了しました");        
-      });
+      ExecuteMoneyTransfer();
     },
   }
 }
