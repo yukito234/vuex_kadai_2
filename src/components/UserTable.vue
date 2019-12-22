@@ -119,7 +119,7 @@ export default {
       async function culcMoney(){
         that.loginUserMoney = that.loginUserMoney - amount;        
         targetUserMoney = targetUserMoney + amount;        
-        return ;
+        
       }
       //トランザクション処理により、ログインユーザと送り先ユーザのfirestore残高データを更新
       function doTransaction(){
