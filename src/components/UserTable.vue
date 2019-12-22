@@ -126,7 +126,7 @@ export default {
         const loginUserRef = db.collection("users").doc(that.loginUserID);
         const targetUserRef = db.collection("users").doc(targetUserID);        
 
-        return db.runTransaction( async transaction => {
+        db.runTransaction( async transaction => {
           const loginUserTransaction = transaction.update(loginUserRef, { money: that.loginUserMoney });          
           const targetUserTransaction =transaction.update(targetUserRef, { money: targetUserMoney });          
         }).then(function() {
