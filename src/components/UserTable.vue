@@ -128,9 +128,7 @@ export default {
 
         return db.runTransaction( async transaction => {
           const loginUserTransaction = transaction.update(loginUserRef, { money: that.loginUserMoney });          
-          const targetUserTransaction =transaction.update(targetUserRef, { money: targetUserMoney });
-          //return Promise.resolve();
-          return ;
+          const targetUserTransaction =transaction.update(targetUserRef, { money: targetUserMoney });          
         }).then(function() {
           alert("送金は正常に完了しました");          
         }).catch(function(err) {
@@ -142,8 +140,7 @@ export default {
       async function ExecuteMoneyTransfer(){
         await getTargetInfo();
         await culcMoney();
-        await doTransaction();
-        return;
+        await doTransaction();        
       }
       //送金の実行
       ExecuteMoneyTransfer();
