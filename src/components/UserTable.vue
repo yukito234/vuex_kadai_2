@@ -101,7 +101,7 @@ export default {
 
       //送り先ユーザのドキュメントIDと残高を取得
       async function getTargetInfo(){
-        return db.collection("users").get()
+        await db.collection("users").get()
             .then( querySnapshot => {
                 for( let i = 0; i < querySnapshot.docs.length; i++ ){         
                   if( querySnapshot.docs[i].data().name === name ){
